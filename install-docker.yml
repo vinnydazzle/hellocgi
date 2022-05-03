@@ -1,0 +1,32 @@
+---
+- name: update web servers
+  hosts: nodes
+  become: yes
+      
+
+  tasks:
+  - name: install yum updates on linux server
+    yum:
+      name: yum-utils
+      state: latest
+   
+  - name: enable server extras
+    shell: yum-config-manager --enable rhui-REGION-rhel-server-extras
+
+  - name: install docker on linux  
+    yum:
+      name: docker
+      state: present
+
+  - name: start docker
+    systemd:
+      name: docker
+      state: started
+
+  - name: enable docker
+    systemd:
+      name: docker
+      enabled: true
+  
+      
+...

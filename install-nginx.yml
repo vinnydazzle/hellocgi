@@ -1,0 +1,43 @@
+---
+- name: update web servers
+  hosts: nodes
+  become: yes
+      
+
+  tasks:
+  - name: enable nginx on linux
+    shell: "amazon-linux-extras enable nginx1"
+
+  - name: install nginx
+    yum:
+      name: nginx
+      state: latest
+
+  - name: start nginx
+    systemd:
+      name: nginx
+      state: started
+
+  - name: enable nginx
+    systemd:
+      name: nginx
+      enabled: true
+
+  - name: install firewall on linux  
+    yum:
+      name: firewalld
+      state: present
+
+  - name: start firewall
+    systemd:
+      name: firewalld
+      state: started
+
+  - name: add service https
+    shell: firewall-cmd --zone=public --permanent --add-service=https
+  
+  - name: reload firewall
+    systemd:
+      name: firewalld
+      state: restarted
+...

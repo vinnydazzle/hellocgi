@@ -1,0 +1,19 @@
+---
+- name: update web servers
+  hosts: nodes
+  become: yes
+  vars: 
+    req_java: java-1.8.0-openjdk.x86_64
+      
+
+  tasks:
+  - name: install java on linux server
+    yum:
+      name: "{{req_java}}"
+      state: present
+
+  - name: install git 
+    package:
+      name: git
+      state: present
+...

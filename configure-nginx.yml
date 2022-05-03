@@ -1,0 +1,28 @@
+---
+- name: update web servers
+  hosts: nodes
+  become: yes
+       
+
+  tasks:
+  - name: creates new directory www/hellocgi.com
+    file:
+      path: "/var/www/hellocgi.com"
+      state: directory
+
+  - name: creates new directory hellocgi
+    file:
+      path: "/home/ec2-user/hellocgi"
+      state: directory
+
+  - name: Clone a repo with separate git directory
+    ansible.builtin.git:
+      repo: https://github.com/vinnydazzle/hellocgi.git
+      dest: /home/ec2-user/hellocgi/
+     
+  - name: Copy content from git repo to /var/www/hellocgi.com 'files'
+    copy: src=/home/ec2-user/hellocgi/hellocgi/index.html dest=/var/www/hellocgi.com/ remote_src=yes directory_mode=yes
+    
+
+
+...

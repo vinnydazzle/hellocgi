@@ -35,7 +35,10 @@
 
   - name: add service https
     shell: firewall-cmd --zone=public --permanent --add-service=https
-  
+ 
+  - name: add service http
+    shell: firewall-cmd --zone=public --permanent --add-service=http
+      
   - name: reload firewall
     systemd:
       name: firewalld

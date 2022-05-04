@@ -1,0 +1,43 @@
+generate ssl key file:
+openssl genrsa -des3 -out helloworld.key 4096
+
+to make a sign in request and creates a csr file
+openssl req -new -key helloworld.key -out helloworld.csr
+
+to remove password
+cp helloworld.key helloworld.key.pw
+
+write RSA Key 
+openssl rsa -in helloworld.key.pw -out helloworld.key
+
+to see the ssl certificate
+cat helloworld.csr
+
+to sign in the certificate (just like the third party does)
+openssl x509 -req -in helloworld.csr -signkey helloworld.key -out helloworld.crt
+(PRIVATE key is sent to the email)
+
+To save the new pvt key, create a directory under /etc/nginx
+Sudo mkdir /etc/nginx/ssl
+
+Copy the crt file to newly created folder
+sudo cp helloworld.crt /etc/nginx/ssl
+
+Copy the key file to newly created folder
+sudo cp helloworld.key /etc/nginx/ssl
+
+edit the default of config file of the nginx (uncomment the https comments) or add new file helloworld.conf
+sudo vim /etc/nginx/conf.d/helloworld.conf
+
+server {
+        listen 80 default_server;
+}
+server {
+listen 443 ssl default_server;
+ssl_certificate /etc/nginx/ssl/helloworld.crt;
+ssl_certificate_key /etc/nginx/ssl/helloworld.key;
+server_name mynginxdemo.com www.mynginxdemo.com;
+root /var/www/mynginxdemo.com;
+index index.html;
+try_files $uri /index.html;
+}
